@@ -1,3 +1,4 @@
+from keyboards.inline.main_menu_super_admin import edit_premium_prices
 import re
 import time
 import datetime
@@ -377,6 +378,7 @@ async def handle_albums(message: types.Message, album: List[types.Message]):
 # Bot Edit Section
 @dp.callback_query_handler(IsSuperAdmin(),text='settings',state='*')
 async def settings(call: types.CallbackQuery):
+    await call.answer(cache_time=1)
     await call.message.edit_text("<b>✏️Nimani o'zgartirmoqchisiz</b>",reply_markup=settings_menu_for_super_admin)
 
 
@@ -478,11 +480,11 @@ async def edirt__qollanma(message: types.Message,state:FSMContext):
             data['get_qollanma']['from_chat_id']= channel_id
             with open('data.json', 'w') as file:
                 json.dump(data, file, indent=4)
-            await message.answer(text='<b>✅Qo\'llanma  yangilandi</b>',reply_markup=main_menu_for_super_admin)
+            await message.answer(text='<b>✅Qo\'llanma  yangilandi!</b>',reply_markup=main_menu_for_super_admin)
             await state.finish()
 
         else:
-            await message.answer(text='<b>❌Qo\'llanma  yangilanmadi</b>',reply_markup=main_menu_for_super_admin)
+            await message.answer(text='<b>❌Qo\'llanma  yangilanmadi!</b>',reply_markup=main_menu_for_super_admin)
             await state.finish()
     else:
         await message.answer("<b>❌Bot kanalga adminligiga va kanal maxfiy ekanligiga ishonch hosil qiling.</b>",reply_markup=main_menu_for_super_admin)
@@ -514,11 +516,11 @@ async def edirt__administator(message: types.Message,state:FSMContext):
             data['administator']['from_chat_id']= channel_id
             with open('data.json', 'w') as file:
                 json.dump(data, file, indent=4)
-            await message.answer(text='<b>✅Adminni post yangilandi</b>',reply_markup=main_menu_for_super_admin)
+            await message.answer(text='<b>✅Adminni post yangilandi!</b>',reply_markup=main_menu_for_super_admin)
             await state.finish()
 
         else:
-            await message.answer(text='<b>❌✅Admin post  yangilanmadi</b>',reply_markup=main_menu_for_super_admin)
+            await message.answer(text='<b>❌✅Admin post  yangilanmadi!</b>',reply_markup=main_menu_for_super_admin)
             await state.finish()
     else:
         await message.answer("<b>❌Bot kanalga adminligiga va kanal maxfiy ekanligiga ishonch hosil qiling.</b>",reply_markup=main_menu_for_super_admin)
@@ -548,11 +550,11 @@ async def edirt__starts(message: types.Message,state:FSMContext):
             data['get_stars']['from_chat_id']= channel_id
             with open('data.json', 'w') as file:
                 json.dump(data, file, indent=4)
-            await message.answer(text='<b>✅Stars  posti yangilandi</b>',reply_markup=main_menu_for_super_admin)
+            await message.answer(text='<b>✅Stars  posti yangilandi!</b>',reply_markup=main_menu_for_super_admin)
             await state.finish()
 
         else:
-            await message.answer(text='<b>❌Stars posti yangilanmadi</b>',reply_markup=main_menu_for_super_admin)
+            await message.answer(text='<b>❌Stars posti yangilanmadi!</b>',reply_markup=main_menu_for_super_admin)
             await state.finish()
     else:
         await message.answer("<b>❌Bot kanalga adminligiga va kanal maxfiy ekanligiga ishonch hosil qiling.</b>",reply_markup=main_menu_for_super_admin)
@@ -561,6 +563,113 @@ async def edirt__starts(message: types.Message,state:FSMContext):
 
 
 
+# Referalning Qiymatini o'zgartirish
+from keyboards.inline.main_menu_super_admin import edit_price_button
+@dp.callback_query_handler(IsSuperAdmin(),text='edit_ref_sum')
+async def edirt_starts(call: types.CallbackQuery):
+    await call.answer(cache_time=1)
+    await call.message.edit_text('Qaysi narxni o\'zgartirmoqchisiz?',reply_markup=edit_price_button)
+
+
+@dp.callback_query_handler(IsSuperAdmin(),text='edit_price_normal')
+async def edit_price_normal(call: types.CallbackQuery):
+    await call.answer(cache_time=1)
+    
+    await call.message.edit_text('💴Oddiy Referal Narxini menga yuboring va uni joriy qilaman.\n\nEtibor bering faqat raqamlardan tashkil topsin va va belgilardan iborat bo\'lmasin',reply_markup=back_to_main_menu)
+    await SuperAdminState.SUPER_ADMIN_UPDATE_REF_SUM_NORMAL.set()
+
+@dp.message_handler(IsSuperAdmin(),content_types=types.ContentType.TEXT,state=SuperAdminState.SUPER_ADMIN_UPDATE_REF_SUM_NORMAL)
+async def edit_price__normal(message: types.Message,state:FSMContext):
+    ref_sum = message.text
+    if ref_sum and ref_sum.isdigit():
+        with open('data.json', 'r') as file:
+            data = json.load(file) 
+        if data['price']['normal_price']:
+            data['price']['normal_price'] = ref_sum
+            with open('data.json', 'w') as file:
+                json.dump(data, file, indent=4)
+            await message.answer(text='<b>✅Normal Referal Summasi yangilandi!</b>',reply_markup=main_menu_for_super_admin)
+            await state.finish()
+
+        else:
+            await message.answer(text='<b>❌Normal Referal Summasiyangilanmadi!</b>',reply_markup=main_menu_for_super_admin)
+            await state.finish()
+    else:
+        await message.answer("<b>❌Bot kanalga adminligiga va kanal maxfiy ekanligiga ishonch hosil qiling.</b>",reply_markup=main_menu_for_super_admin)
+        await state.finish()
+
+@dp.callback_query_handler(IsSuperAdmin(),text='edit_price_premium')
+async def edit_price_premium(call: types.CallbackQuery):
+    await call.answer(cache_time=1)
+    await call.message.edit_text('💎Premium Referal Narxini menga yuboring va uni joriy qilaman.\n\nEtibor bering faqat raqamlardan tashkil topsin va va belgilardan iborat bo\'lmasin',reply_markup=back_to_main_menu)
+    await SuperAdminState.SUPER_ADMIN_UPDATE_REF_SUM_PREMIUM.set()
+
+@dp.message_handler(IsSuperAdmin(),content_types=types.ContentType.TEXT,state=SuperAdminState.SUPER_ADMIN_UPDATE_REF_SUM_PREMIUM)
+async def edit_price__premium(message: types.Message,state:FSMContext):
+
+    ref_sum = message.text
+    if ref_sum and ref_sum.isdigit():
+        with open('data.json', 'r') as file:
+            data = json.load(file) 
+        if data['price']['premium_price']:
+            data['price']['premium_price'] = ref_sum
+            with open('data.json', 'w') as file:
+                json.dump(data, file, indent=4)
+            await message.answer(text='<b>✅Premium Referal Summasi yangilandi!</b>',reply_markup=main_menu_for_super_admin)
+            await state.finish()
+
+        else:
+            await message.answer(text='<b>❌Premium  Referal Summasi yangilanmadi!</b>',reply_markup=main_menu_for_super_admin)
+            await state.finish()
+    else:
+        await message.answer("<b>❌Bot kanalga adminligiga va kanal maxfiy ekanligiga ishonch hosil qiling.</b>",reply_markup=main_menu_for_super_admin)
+        await state.finish()
+
+
+# Premium narxlarini o'zgartirish
+@dp.callback_query_handler(IsSuperAdmin(),text='edit_premium_prices')
+async def edit_primium_prices(call: types.CallbackQuery):
+    await call.answer(cache_time=1)
+    await call.message.edit_text('Qaysi Premium Tarigini o\'zgartirmoqchisiz?',reply_markup=edit_premium_prices())
+    
+
+
+@dp.callback_query_handler(IsSuperAdmin(),text_contains='premium_edit')
+async def edit_premium__price(call: types.CallbackQuery,state: FSMContext):
+    await state.finish()    
+    await call.answer(cache_time=1)
+    dataa = call.data.rsplit(":")
+    premium_package = dataa[1]
+    if premium_package:
+        await state.update_data({'package':premium_package})
+        await call.message.edit_text('💎Premium Narxini menga yuboring va uni joriy qilaman.\n\nEtibor bering faqat raqamlardan tashkil topsin va va belgilardan iborat bo\'lmasin',reply_markup=back_to_main_menu)
+        await SuperAdminState.SUPER_ADMIN_UPDATE_SUM_PREMIUM_MONTH.set()
+
+@dp.message_handler(IsSuperAdmin(),content_types=types.ContentType.TEXT,state=SuperAdminState.SUPER_ADMIN_UPDATE_SUM_PREMIUM_MONTH)
+async def change_premium(message: types.Message,state:FSMContext):
+    package_data = await state.get_data()
+    price = message.text
+    if price and price.isdigit():
+        package = package_data.get('package')
+        with open('data.json','r') as file:
+            data = json.load(file)
+        if package and package:
+            data['premium_prices'][package]=price
+            with open('data.json', 'w') as file:
+                    json.dump(data, file, indent=4)
+            await message.answer(text=f'<b>✅{package.title()} Premium  Summasi yangilandi!</b>',reply_markup=main_menu_for_super_admin)
+            await state.finish()
+        else:
+            await message.answer(text='<b>❌Premium  Referal Summasi yangilanmadi!</b>',reply_markup=main_menu_for_super_admin)
+            await state.finish()
+    else:
+        await message.answer("<b>❌Bot kanalga adminligiga va kanal maxfiy ekanligiga ishonch hosil qiling.</b>",reply_markup=main_menu_for_super_admin)
+        await state.finish()
+
+
+
+    
+    
 
 
 

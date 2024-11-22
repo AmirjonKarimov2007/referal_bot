@@ -43,7 +43,8 @@ async def get_premium_func(call: types.CallbackQuery):
         if user_balance < max_balance:
             await bot.answer_callback_query(call.id, text=f"Premiumga sarflash uchun hisobingizda kamida {max_balance} so'm bo'lishi kerak!", show_alert=True)
         elif user_balance>=max_balance:
-            await bot.send_message(chat_id=call.from_user.id,text='Premium Tarifingizni Tanlang!',reply_markup=premium_keybaord())
+            await call.message.edit_text(text='Premium Tarifingizni Tanlang!',reply_markup=premium_keybaord())
+            
 @dp.message_handler(text="TOP foydalanuvchilar")
 async def top_active_users(message: types.Message):
     top_users = await db.get_top_users()  # DB-dan top 10 foydalanuvchilarni olamiz

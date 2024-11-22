@@ -36,7 +36,7 @@ async def bot_start(message: types.Message):
     user = message.from_user
     username = message.from_user.username
     try:
-        await db.add_user(user_id=user.id,username=username, name=user.first_name)
+        await db.add_user(user_id=message.from_user.id,username=username, name=user.first_name)
     except asyncpg.exceptions.UniqueViolationError:
         await db.select_user(user_id=message.from_user.id)
     except Exception as ex:
@@ -44,18 +44,11 @@ async def bot_start(message: types.Message):
 
     user_id = message.from_user.first_name
     await message.reply(f"<b>👋🏻 Assalomu Aleykum {user_id} botimizga Xush kelipsiz!</b>")
+    
 @dp.message_handler(IsUser(), CommandStart(), state="*")
 async def bot_start(message: types.Message):
     user = message.from_user
     username = message.from_user.username
-    try:
-        await db.add_user(user_id=user.id,username=username, name=user.first_name)
-    except asyncpg.exceptions.UniqueViolationError:
-        await db.select_user(user_id=message.from_user.id)
-    except Exception as ex:
-        print(f"IsUser:{ex}")
-
-    user_id = message.from_user.first_name
     user_id = message.from_user.first_name
     await message.reply(f"<b>👋🏻 Assalomu Aleykum {user_id} botimizga Xush kelipsiz!</b>",reply_markup=kb.main())
 from states.admin_state import RegisterState
@@ -68,16 +61,22 @@ async def phone_number(message: types.Message,state: FSMContext):
     phone_num = phone_usm.replace("+", "")
     with open('data.json', 'r') as file:
         data = json.load(file)
-    price = data['price']['price']
+    normal_price = data['price']['normal_price']
+    premium_price = data['price']['premium_price']
     try:
         user = await db.is_user(user_id=int(message.from_user.id))
         if user:
             reffather_id = user[0]['ref_father']
             register = user[0]['register']
             if reffather_id and await db.is_user(user_id=int(reffather_id)):
-                await db.update_balance(user_id=int(user[0]['ref_father']),sum=int(price))
-                await bot.send_message(chat_id=int(reffather_id),text=f"<b>🤑Sizga {message.from_user.first_name} tomonidan referal qo'shildi.</b>")
-                await db.update_user_number(number=int(phone_num), user_id=int(message.from_user.id),register=True)
+                if message.from_user.is_premium:
+                    await db.update_balance(user_id=int(user[0]['ref_father']),sum=int(premium_price))
+                    await bot.send_message(chat_id=int(reffather_id),text=f"<b>🤑Sizga {message.from_user.first_name} tomonidan referal qo'shildi.\n\nSumma:{premium_price} so'm</b>")
+                    await db.update_user_number(number=int(phone_num), user_id=int(message.from_user.id),register=True)
+                else:
+                    await db.update_balance(user_id=int(user[0]['ref_father']),sum=int(normal_price))
+                    await bot.send_message(chat_id=int(reffather_id),text=f"<b>🤑Sizga {message.from_user.first_name} tomonidan referal qo'shildi.\n\nSumma:{normal_price} so'm</b>")
+                    await db.update_user_number(number=int(phone_num), user_id=int(message.from_user.id),register=True)
             else:
                 await db.update_user_number(number=int(phone_num), user_id=int(message.from_user.id),register=True)
         else:
