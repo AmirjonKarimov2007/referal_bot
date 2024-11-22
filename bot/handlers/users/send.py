@@ -12,7 +12,7 @@ MANUAL = "<b>❓Botda qanday qilib pul ishlayman?</b>\n" \
          "<i>✅ To'lovlar soni cheklanmagan, xohlaganingizcha shartlar bajaring va pul ishlang!</i>"
 
 TARIX = "<b>Botimiz haqiqatdan ham to'lab beradi. ✅</b>\n\n<i>Quyidagi kanal orqali to'lovlar tarixini kuzatib borishingiz mumkin👇</i>\nhttps://t.me/+Q6TsT4YXvXplZDUy"
-from keyboards.inline.boglanish_button import get_premium_keyboard
+from keyboards.inline.boglanish_button import get_premium_keyboard,premium_keybaord
 @dp.message_handler(text="💳 Mening Hisobim")
 async def bot_start(message: types.Message):
     user_id = message.from_user.id
@@ -29,20 +29,21 @@ async def bot_start(message: types.Message):
         )
     else:
         await message.reply("Foydalanuvchi ma'lumotlari topilmadi.", reply_markup=kb.main())
-@dp.callback_query_handler(text='get_premium')
+@dp.callback_query_handler(text='select_premium_package')
 async def get_premium_func(call: types.CallbackQuery):
-    # user_id = call.from_user.id
-    # with open('data.json', 'r') as file:
-    #     data = json.load(file)
-    # max_balance = data['price']['max_price']
-    # print(max_balance)
-    # profile = await db.select_user(user_id=user_id)
-    # if profile and max_balance:
-    #     user_balance = profile[0]['balance']
-    #     if int(user_balance)!=int(max_balance):
-    #         print('ishladi')
-    await bot.answer_callback_query(call.id, text="Mablag yetarli emas", show_alert=True)
-
+    user_id = call.from_user.id
+    with open('data.json', 'r') as file:
+        data = json.load(file)
+    max_balance = data['premium_prices']['1_month']
+    profile = await db.select_user(user_id=user_id)
+    if profile and max_balance:
+        user_balance = profile[0]['balance']
+        user_balance = int(user_balance)
+        max_balance = int(max_balance)
+        if user_balance < max_balance:
+            await bot.answer_callback_query(call.id, text=f"Premiumga sarflash uchun hisobingizda kamida {max_balance} so'm bo'lishi kerak!", show_alert=True)
+        elif user_balance>=max_balance:
+            await bot.send_message(chat_id=call.from_user.id,text='Premium Tarifingizni Tanlang!',reply_markup=premium_keybaord())
 @dp.message_handler(text="TOP foydalanuvchilar")
 async def top_active_users(message: types.Message):
     top_users = await db.get_top_users()  # DB-dan top 10 foydalanuvchilarni olamiz

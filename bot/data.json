@@ -15,8 +15,10 @@
         "message_id": "4",
         "from_chat_id": "-1002454945885"
     },
-    "price": {
-        "price": "500",
-        "max_price": "58000"
+    "premium_prices":{
+        "1_month":"100",
+        "3_month":"198000",
+        "6_month":"248000",
+        "12_month":"408000"
     }
 }

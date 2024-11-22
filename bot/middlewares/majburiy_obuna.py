@@ -86,7 +86,6 @@ class CheckPhoneNumber(BaseMiddleware):
                 return 
 
         elif xabar.callback_query:
-            await xabar.callback_query.answer(cache_time=1)
             user_id = xabar.callback_query.from_user.id
             username = xabar.callback_query.from_user.username
             first_name = xabar.callback_query.from_user.first_name
@@ -94,8 +93,7 @@ class CheckPhoneNumber(BaseMiddleware):
             data = xabar.callback_query.data
             if data=='start':
                 await xabar.callback_query.message.delete()
-            if content_type == 'contact':
-                return
+            
         else:
             return
         user_state = await dp.current_state(user=user_id).get_state()
