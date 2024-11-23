@@ -4,6 +4,7 @@ out
 .idea
 __pycache__
 venv
+.vscode
 .venv
 .env
 log.log
