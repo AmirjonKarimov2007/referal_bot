@@ -7,13 +7,13 @@ check.insert(InlineKeyboardButton(text="❌Yo'q", callback_data='Yoq'))
 get_premium_keyboard = InlineKeyboardMarkup(row_width=1)
 get_premium_keyboard.insert(InlineKeyboardButton(text='PREMIUM UCHUN SARFLASH✅',callback_data="select_premium_package"))
 
-def premium_keybaord():
+def premium_keyboard(balance):
     # Tariflarga mos emoji tayyorlash
     emoji_map = {
-        "1_month": "🏅",
-        "3_month": "⚡",
-        "6_month": "🔥",
-        "12_month": "💎"
+        "1_oy": "🏅",
+        "3_oy": "⚡",
+        "6_oy": "🔥",
+        "12_oy": "💎"
     }
     
     premiums = InlineKeyboardMarkup(row_width=1)
@@ -22,12 +22,13 @@ def premium_keybaord():
     premium_prices = data['premium_prices']
     
     for k, v in premium_prices.items():
-        # Har bir tarifga mos emoji topish
-        emoji = emoji_map.get(k, "💎")  # Agar emoji topilmasa, default emoji
-        premiums.insert(
-            InlineKeyboardButton(
-                text=f"{emoji} {k.replace('_', ' ')} - {v} so'm",  # Matnni formatlash
-                callback_data=f"premium_{k}"
+        v = int(v)
+        if balance >= v: 
+            emoji = emoji_map.get(k, "💎")  
+            premiums.insert(
+                InlineKeyboardButton(
+                    text=f"{emoji} {k.replace('_', ' ')} - {v} so'm",  
+                    callback_data=f"take_premium:{k}"
+                )
             )
-        )
     return premiums

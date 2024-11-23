@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import User
+from .models import User,PromoCode
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'username', 'user_id','number']  # Customize the fields displayed in the admin interface
+    list_display = ['id', 'name', 'username', 'user_id', 'number', 'balance', 'ref_father']
+    list_filter = ['balance', 'ref_father', 'name'] 
 
-# Register your models here.
 admin.site.register(User, UserAdmin)
+admin.site.register(PromoCode)

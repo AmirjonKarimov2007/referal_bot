@@ -21,26 +21,26 @@ async def Money(message: types.Message):
                                 f"Pastdagi havola orqali doʻstlaringizga ulashing:\n"
                                 f"<b>🔗 {link}</b>",reply_markup=types.InlineKeyboardMarkup().add(types.InlineKeyboardButton("Ulashish ♻️", url=f"https://t.me/share/url?url={link}")))
 
-@dp.inline_handler()
-async def referals(inline_query: types.InlineQuery):
-    user_id =inline_query.from_user
-    link = await get_start_link(user_id.id)
-    bot_get = await bot.get_me()
-    text = f"<b>✅ «Axcha Pul» konkursi rasmiy boti.</b>\n\n"\
-           f"🎈<a href='{user_id.url}'>{inline_query.from_user.first_name}</a> do'stingizdan unikal havola-taklifnoma.\n\n"\
-           f"📣 <a href='{'https://t.me/+Q6TsT4YXvXplZDUy'}'>{'<b>«About Me : Portfolio»</b>'}</a> kanalining rasmiy botiga do'stlaringizni taklif qiling va kuniga 100.000 so'mdan ko'proq pul toping!\n\n" \
-           f"<b>👇 Boshlash uchun bosing:</b>\n"\
-           f"{link}"
+# @dp.inline_handler()
+# async def referals(inline_query: types.InlineQuery):
+#     user_id =inline_query.from_user
+#     link = await get_start_link(user_id.id)
+#     bot_get = await bot.get_me()
+#     text = f"<b>✅ «Axcha Pul» konkursi rasmiy boti.</b>\n\n"\
+#            f"🎈<a href='{user_id.url}'>{inline_query.from_user.first_name}</a> do'stingizdan unikal havola-taklifnoma.\n\n"\
+#            f"📣 <a href='{'https://t.me/+Q6TsT4YXvXplZDUy'}'>{'<b>«About Me : Portfolio»</b>'}</a> kanalining rasmiy botiga do'stlaringizni taklif qiling va kuniga 100.000 so'mdan ko'proq pul toping!\n\n" \
+#            f"<b>👇 Boshlash uchun bosing:</b>\n"\
+#            f"{link}"
 
-    input_content = types.InputTextMessageContent(text,disable_web_page_preview=True)
-    inl = types.InlineKeyboardMarkup().add(types.InlineKeyboardButton("✅ Boshlash ✅", url=f"{link}"))
-    referal = types.InlineQueryResultArticle(
-        id='01',
-        thumb_url=None,
-        title="Do'stlarga yuborish 📲",
-        description="Do'stlarga yuborish uchun shu yerni bosing",
-        input_message_content=input_content,
-        reply_markup=inl,
-    )
-    lis = [referal]
-    msg = await inline_query.answer(results=lis, cache_time=1)
+#     input_content = types.InputTextMessageContent(text,disable_web_page_preview=True)
+#     inl = types.InlineKeyboardMarkup().add(types.InlineKeyboardButton("✅ Boshlash ✅", url=f"{link}"))
+#     referal = types.InlineQueryResultArticle(
+#         id='01',
+#         thumb_url='https://img.freepik.com/premium-photo/3d-telegram-logo-icon-glow-high-quality-render_474486-37.jpg',
+#         title="Do'stlarga yuborish 📲",
+#         description="Do'stlarga yuborish uchun shu yerni bosing",
+#         input_message_content=input_content,
+#         reply_markup=inl,
+#     )
+#     lis = [referal]
+#     msg = await inline_query.answer(results=lis, cache_time=1)

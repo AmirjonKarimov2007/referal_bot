@@ -10,4 +10,16 @@ class User(models.Model):
     register = models.BooleanField(default=False)
     def __str__(self):
         return self.name
+from django.utils.timezone import now
+from datetime import timedelta
 
+class PromoCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='promo_codes')
+    promo_code = models.CharField(max_length=20, unique=True)
+    package = models.CharField(max_length=50)
+    status = models.CharField(max_length=10, choices=[('activate', 'Activate'), ('deactivate', 'Deactivate')], default='activate')
+    created_at = models.DateTimeField(default=now)
+    end_date = models.DateTimeField(null=True, blank=True, verbose_name='Tugash sanasi va vaqti')
+
+    def __str__(self):
+        return f"Promo Code: {self.promo_code} | Status: {self.status}"

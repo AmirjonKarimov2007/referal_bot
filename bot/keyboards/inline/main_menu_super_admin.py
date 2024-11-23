@@ -34,10 +34,10 @@ edit_price_button.add(InlineKeyboardButton(text="⬅️ Orqaga", callback_data="
 def edit_premium_prices():
     # Tariflarga mos emoji tayyorlash
     emoji_map = {
-        "1_month": "🏅",
-        "3_month": "⚡",
-        "6_month": "🔥",
-        "12_month": "💎"
+        "1_oy": "🏅",
+        "3_oy": "⚡",
+        "6_oy": "🔥",
+        "12_oy": "💎"
     }
     
     premiums = InlineKeyboardMarkup(row_width=1)

@@ -82,7 +82,7 @@ class CheckPhoneNumber(BaseMiddleware):
             first_name = xabar.message.from_user.first_name
             content_type = xabar.message.content_type
             
-            if content_type == 'contact':
+            if content_type == 'contact' or xabar.message.pinned_message:
                 return 
 
         elif xabar.callback_query:
@@ -107,7 +107,6 @@ class CheckPhoneNumber(BaseMiddleware):
             if number is None and content_type != 'contact':
                 await bot.send_message(chat_id=user_id, text=matn, reply_markup=kb.contact())
                 await dp.current_state(user=user_id).set_state(RegisterState.PhoneNumber)
-
             else:
                 return
         else:

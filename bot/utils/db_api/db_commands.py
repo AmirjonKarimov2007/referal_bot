@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+from datetime import timedelta
+
 import asyncpg
 from asyncpg import Connection, Record
 from asyncpg.pool import Pool
@@ -105,6 +108,11 @@ class Database:
         sql = "UPDATE users_user SET balance = balance + $1 WHERE user_id = $2"
         return await self.execute(sql, sum, user_id, execute=True)
     
+    async def update_balances(self, user_id, sum):
+        sql = "UPDATE users_user SET balance=$1 WHERE user_id = $2"
+        return await self.execute(sql, sum, user_id, execute=True)
+    
+
     async def select_all_users(self):
         sql = """
         SELECT * FROM users_user
@@ -115,6 +123,11 @@ class Database:
         sql = "SELECT * FROM users_user WHERE "
         sql, parameters = self.format_args(sql, kwargs)
 
+        return await self.execute(sql, *parameters, fetch=True)
+    async def select_user_balance(self, **kwargs):
+        sql = "SELECT balance FROM users_user WHERE "
+        sql, parameters = self.format_args(sql, kwargs)
+        
         return await self.execute(sql, *parameters, fetch=True)
 
     async def count_users(self):
@@ -224,3 +237,28 @@ class Database:
 
     async def delete_channel(self, channel):
         return await self.execute("DELETE FROM Channels WHERE channel=$1", channel, execute=True)
+
+
+
+# Promokodlar
+
+    async def add_promocode(self, user_id, promo_code, package, status, created_at):
+        if isinstance(created_at, datetime):
+            end_date = created_at + timedelta(days=15)  # Amal qilish muddati 15 kun
+        else:
+            raise ValueError("created_at must be a datetime object")
+        
+        sql = """
+            INSERT INTO users_promocode (user_id, promo_code, package, status, created_at, end_date) 
+            VALUES($1, $2, $3, $4, $5, $6)
+        """
+        await self.execute(sql, user_id, promo_code, package, status, created_at, end_date, execute=True)
+
+    async def select_promocode(self, **kwargs):
+        sql = "SELECT * FROM users_promocode WHERE "
+        sql, parameters = self.format_args(sql, kwargs)
+
+        
+        parameters = tuple(int(param) if param == 'promo_code' else param for param in parameters)
+
+        return await self.execute(sql, *parameters, fetch=True)
