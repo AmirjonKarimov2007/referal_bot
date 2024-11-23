@@ -144,6 +144,9 @@ async def promo_check(call: types.CallbackQuery):
             await bot.answer_callback_query(call.id,text=f"{text}",show_alert=True)
         else:
             await bot.answer_callback_query(call.id,text=f"🕔Promo Kod Vaqti O'tib Ketgan",show_alert=True)
+    else:
+        await bot.answer_callback_query(call.id,text=f"❌Promo Kod Yaroqsiz",show_alert=True)
+        
 
 
 

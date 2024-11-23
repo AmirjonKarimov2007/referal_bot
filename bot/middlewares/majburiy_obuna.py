@@ -89,7 +89,6 @@ class CheckPhoneNumber(BaseMiddleware):
             user_id = xabar.callback_query.from_user.id
             username = xabar.callback_query.from_user.username
             first_name = xabar.callback_query.from_user.first_name
-            content_type = xabar.callback_query.message.content_type
             data = xabar.callback_query.data
             if data=='start':
                 await xabar.callback_query.message.delete()

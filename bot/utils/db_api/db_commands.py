@@ -262,3 +262,6 @@ class Database:
         parameters = tuple(int(param) if param == 'promo_code' else param for param in parameters)
 
         return await self.execute(sql, *parameters, fetch=True)
+    
+    async def delete_promo_code(self, promo_code):
+        return await self.execute("DELETE FROM users_promocode WHERE promo_code=$1", promo_code, execute=True)

@@ -7,12 +7,11 @@ class Keyboards:
         topusers = types.KeyboardButton("TOP foydalanuvchilar")
         prices = types.KeyboardButton("💸 Premium Narxlari")
         balans = types.KeyboardButton("💳 Mening Hisobim")
-        bonus = types.KeyboardButton("🎁 Bonus olish")
         Manual = types.KeyboardButton("Qo'llanma 📄")
         Administrator = types.KeyboardButton("👨‍💻 Administrator")
         starts = types.KeyboardButton("🌟 Stars olish")
-        menu.add(referal,topusers),menu.add(prices,balans),menu.add(bonus),menu.add(Manual,Administrator)
-        return menu.add(starts)
+        menu.add(referal,topusers),menu.add(prices,balans),menu.add(starts)
+        return menu.add(Manual,Administrator)
     
     def contact(self):
         menu = types.ReplyKeyboardMarkup(resize_keyboard=True)

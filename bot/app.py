@@ -8,7 +8,6 @@ from utils.set_bot_commands import set_default_commands
 
 
 async def on_startup(dispatcher):
-    # Birlamchi komandaPlar (/star va /help)
     await db.create()
     try:
         await db.create_table_channel()
@@ -16,9 +15,7 @@ async def on_startup(dispatcher):
         await db.create_table_files()
     except Exception as err:
           print(err)
-    # Get the user ID from the incoming update
     await set_default_commands(dispatcher)
-    # Bot ishga tushgani haqida adminga xabar berish
     await on_startup_notify(dispatcher)
 
 
