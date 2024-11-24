@@ -215,6 +215,7 @@ async def send_advertisement_to_user(message: types.Message, state: FSMContext):
     
     black_list = 0
     white_list = 0
+    seriy_list = 0
     datas = datetime.datetime.now()
     boshlanish_vaqti = f"{datas.hour}:{datas.minute}:{datas.second}"
 
@@ -233,8 +234,10 @@ async def send_advertisement_to_user(message: types.Message, state: FSMContext):
                                        message_id=message.message_id, reply_markup=message.reply_markup)
                 white_list += 1
             except Exception as e:
-                print(e)
-                black_list += 1
+                if "bot was blocked by the user" in str(e):
+                    black_list += 1
+                else:
+                    seriy_list += 1
                 errors.append((user_id, str(e)))
 
     # Foydalanuvchilarga parallel xabar yuborish
@@ -247,7 +250,8 @@ async def send_advertisement_to_user(message: types.Message, state: FSMContext):
     text = (f'<b>✅ Reklama muvaffaqiyatli yuborildi!</b>\n\n'
             f'<b>⏰ Boshlangan vaqt: {boshlanish_vaqti}</b>\n'
             f'<b>👥 Yuborilgan foydalanuvchilar soni: {white_list}</b>\n'
-            f'<b>🚫 Yuborilmagan foydalanuvchilar soni: {black_list}</b>\n'
+            f'<b>🚫 Botni Bloklagan foydalanuvchilar soni: {black_list}</b>\n'
+            f'<b>🔖 Reklama Yuborilmagan foydalanuvchilar soni: {seriy_list}</b>\n'
             f'<b>🏁 Tugash vaqti: {tugash_vaqti}</b>\n')
 
     await bot.delete_message(chat_id=start_msg.chat.id, message_id=start_msg.message_id)
