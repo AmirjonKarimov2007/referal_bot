@@ -67,18 +67,18 @@ class Database:
         parameters = tuple(int(param) if param == 'user_id' else param for param in parameters)
 
         return await self.execute(sql, *parameters, fetch=True)
-    async def add_user(self, name, username, user_id, balance=0, number=None, ref_father=None,register=False):
-        bot_username = 'Vips_premiumbot'
-        if bot_username!=username:
+    async def add_user(self, name, username, user_id, balance=0, number=None, ref_father=None, register=False):
+        if username and not username[-3:] == "bot":  # username mavjud va oxirgi 3 ta harfi "bot" emasligini tekshiramiz
             sql = """
-                INSERT INTO users_user (name, username, user_id, balance, number, ref_father,register)
-                VALUES ($1, $2, $3, $4, $5, $6,$7)
+                INSERT INTO users_user (name, username, user_id, balance, number, ref_father, register)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
                 RETURNING *
             """
-            
-            return await self.execute(sql, name, username, user_id, balance, number, ref_father,register, fetchrow=True)
+            return await self.execute(sql, name, username, user_id, balance, number, ref_father, register, fetchrow=True)
         else:
             pass
+
+
     async def count_referred_users(self, ref_father):
         sql = """
             SELECT COUNT(*) FROM users_user WHERE ref_father = $1

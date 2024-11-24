@@ -15,13 +15,12 @@ import os
 # environs kutubxonasidan foydalanish
 env = Env()
 env.read_env()
-DB_USER = env.str('DB_USER')
-DB_PASS = env.str('DB_PASS')
-DB_NAME = env.str('DB_NAME')
-DB_HOST = env.str('DB_HOST')
-DB_PORT = env.int('DB_PORT')
-SECRET_KEY = env.str('SECRET_KEY')
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+DB_USER = 'referalbot'
+DB_PASS = 'Karimoff2007'
+DB_NAME = 'referalbot_database'
+DB_HOST = 'postgresql-referalbot.alwaysdata.net'
+DB_PORT = 5432
+SECRET_KEY = 'alskdjaslkjdlkasjdlaksjdoiql1lkj21lkj3'
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -41,6 +40,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'jazzmin',
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -128,11 +129,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_URL = 'static/'
-# STATICFILES_DIRS = [os.path.join(BASE_DIR,'staticfiless')]
-STATIC_ROOT = str(BASE_DIR.joinpath('staticfiless'))
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # STATIC_ROOT = BASE_DIR / 'static'
 

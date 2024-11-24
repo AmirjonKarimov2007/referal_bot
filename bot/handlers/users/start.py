@@ -14,7 +14,6 @@ from keyboards.default.menu import kb
 async def bot_echo(call: CallbackQuery):
     await call.answer(cache_time=1)
     user = call.from_user
-    await call.message.delete()
     try:
         await db.add_user(user_id=user.id,username=call.from_user.username, name=user.first_name)
     except asyncpg.exceptions.UniqueViolationError:

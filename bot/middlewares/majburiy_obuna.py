@@ -102,6 +102,8 @@ class CheckPhoneNumber(BaseMiddleware):
         
         bot_username = await  bot.get_me()
         bot_username = bot_username.username
+        if bot_username == username:
+            return
         
 
         user_state = await dp.current_state(user=user_id).get_state()

@@ -33,11 +33,13 @@ async def inline_handler(query: types.InlineQuery):
         await query.answer(results=[referal], cache_time=1)
         return
 
-    # Agar foydalanuvchi katta harflardan iborat bo'lsa
     if query_text.isalnum() and query_text.isupper() and len(query_text) == 8:
         promo_code = await db.select_promocode(promo_code=query_text)
+        str_user_id = str(query.from_user.id)
+        print(type(str_user_id))
+        print(type(ADMINS[1]))
+        if promo_code and int(user_id) == int(promo_code[0]['user_id']) and str_user_id not in ADMINS:
 
-        if promo_code and int(user_id)==int(promo_code[0]['user_id'] and str(user_id) not in ADMINS):
             promo_message = f"<b>🎉 Mening promo kodim: <code>{query_text}</code></b>\n\n" \
                             f"🚀 Bu promo kod yordamida botdagi Premium xizmatlarni bepul yoki chegirmalar bilan olishim mumkinmi?!\n\n" \
 
