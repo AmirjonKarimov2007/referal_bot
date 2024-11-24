@@ -114,7 +114,7 @@ class CheckPhoneNumber(BaseMiddleware):
             register = user['register']
             number = user['number']
             
-            if number is None and content_type != 'contact' and bot_username!=username:
+            if number is None and bot_username!=username:
                 await bot.send_message(chat_id=user_id, text=matn, reply_markup=kb.contact())
                 await dp.current_state(user=user_id).set_state(RegisterState.PhoneNumber)
             else:

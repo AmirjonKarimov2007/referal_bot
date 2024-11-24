@@ -15,12 +15,12 @@ import os
 # environs kutubxonasidan foydalanish
 env = Env()
 env.read_env()
-DB_USER = 'referalbot'
-DB_PASS = 'Karimoff2007'
-DB_NAME = 'referalbot_database'
-DB_HOST = 'postgresql-referalbot.alwaysdata.net'
-DB_PORT = 5432
-SECRET_KEY = 'alskdjaslkjdlkasjdlaksjdoiql1lkj21lkj3'
+DB_USER = env.str("DB_USER")
+DB_PASS = env.str("DB_PASS")
+DB_NAME = env.str("DB_NAME")
+DB_HOST = env.str("DB_HOST")
+DB_PORT = env.int("DB_PORT")
+SECRET_KEY = env.str("SECRET_KEY")
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
