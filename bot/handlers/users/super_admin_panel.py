@@ -184,16 +184,17 @@ async def channel_list(call: types.CallbackQuery):
 @dp.callback_query_handler(text="statistics")
 async def stat(call : types.CallbackQuery):
     stat = await db.stat()
+    await call.message.delete()
+
     stat = str(stat)
-    for x in stat:
-        dta = x
-        datas = datetime.datetime.now()
-        yil_oy_kun = (datetime.datetime.date(datetime.datetime.now()))
-        soat_minut_sekund = f"{datas.hour}:{datas.minute}:{datas.second}"
-        await call.message.delete()
-        await call.message.answer(f"<b>👥 Bot foydalanuvchilari soni: {(x)} nafar\n</b>"
-                                  f"<b>⏰ Soat: {soat_minut_sekund}\n</b>"
-                                  f"<b>📆 Sana: {yil_oy_kun}</b>",reply_markup=types.InlineKeyboardMarkup().add(types.InlineKeyboardButton("◀️ Orqaga",callback_data="back_to_main_menu")))
+
+    datas = datetime.datetime.now()
+    yil_oy_kun = (datetime.datetime.date(datetime.datetime.now()))
+    soat_minut_sekund = f"{datas.hour}:{datas.minute}:{datas.second}"
+    await call.message.answer(f"<b>👥 Bot foydalanuvchilari soni: {(stat)} nafar\n</b>"
+                                f"<b>⏰ Soat: {soat_minut_sekund}\n</b>"
+                                f"<b>📆 Sana: {yil_oy_kun}</b>",reply_markup=types.InlineKeyboardMarkup().add(types.InlineKeyboardButton("◀️ Orqaga",callback_data="back_to_main_menu")))
+
 
 
 # ADMINGA SEND FUNC

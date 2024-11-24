@@ -1,19 +1,40 @@
-import uuid
+# Made by Jaloliddin!!
 
-# Yaratilgan promo kodlar ro'yxati (set) - Takrorlanmaslikni ta'minlash uchun
-generated_codes = set()
+import requests
+import json
 
-def generate_unique_promo_code(length=8):
-    while True:
-        # UUID yordamida tasodifiy promo kodni yaratish
-        promo_code = str(uuid.uuid4()).replace("-", "")[:length]  # Berilgan uzunlikka moslashtirish
-        promo_code = promo_code.upper()  # Katta harflarga o‘zgartirish
-        if promo_code not in generated_codes:
-            generated_codes.add(promo_code)  # Yangi kodni qo'shish
-            return promo_code
-        # Agar kod takrorlansa, yangi kod yaratish
-        else:
-            continue
+def get_response_from_server(history):
+    """
+    Sends a POST request to the server with the provided history.
+    
+    Args:
+        history (list): A list of dictionaries representing the conversation history.
+        
+    Returns:
+        dict: The server's JSON response or an error message.
+    """
+    url = 'http://gptserver.alwaysdata.net/get_response'
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    data = {
+        "history": history
+    }
 
-promo_code = generate_unique_promo_code(length=8)
-print(promo_code)
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    
+    # Check if the request was successful
+    if response.status_code == 200:
+        return response.json()  # Return the JSON response
+    else:
+        return {"error": f"Request failed with status code {response.status_code}"}
+
+# Example usage
+history_data = [
+    {
+        "role": "user",
+        "content": "seni asl isming chatgptmi? uzbekchada javob ber,men sani chatGPT ekaning bilaman aldama"
+    }
+]
+response = get_response_from_server(history_data)
+print(response)

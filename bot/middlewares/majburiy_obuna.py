@@ -88,8 +88,14 @@ class CheckPhoneNumber(BaseMiddleware):
                 return 
             if xabar.message.pinned_message:
                 pass
+            if str(xabar.message.chat.id).startswith('-'):
+                return
+
 
         elif xabar.callback_query:
+            if str(xabar.callback_query.message.chat.id).startswith('-') and xabar.callback_query.data.startswith("ovoz_add:"):
+                return
+
             user_id = xabar.callback_query.from_user.id
             username = xabar.callback_query.from_user.username
             first_name = xabar.callback_query.from_user.first_name
