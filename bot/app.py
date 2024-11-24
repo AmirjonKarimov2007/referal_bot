@@ -1,7 +1,7 @@
 from aiogram import executor
 
 from data.config import ADMINS
-from loader import dp,db
+from loader import dp,db,bot
 import middlewares, filters, handlers
 from utils.notify_admins import on_startup_notify
 from utils.set_bot_commands import set_default_commands
@@ -17,8 +17,12 @@ async def on_startup(dispatcher):
           print(err)
     await set_default_commands(dispatcher)
     await on_startup_notify(dispatcher)
-
-
+async def send_message(e):
+    await bot.send_message(chat_id=ADMINS[0],text=f'<b>Xatolik yuz berdi:{e}</b>')
+from data.config import ADMINS
 if __name__ == '__main__':
-    executor.start_polling(dp, on_startup=on_startup)
-    dp.middleware.setup()
+    try:
+        executor.start_polling(dp, on_startup=on_startup)
+        dp.middleware.setup()
+    except Exception as e:
+        print(e)
