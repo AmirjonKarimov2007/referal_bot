@@ -99,6 +99,11 @@ class CheckPhoneNumber(BaseMiddleware):
             
         else:
             return
+        
+        bot_username = await  bot.get_me()
+        bot_username = bot_username.username
+        
+
         user_state = await dp.current_state(user=user_id).get_state()
         matn = "<b>🤖 Botdan Foydalanish uchun ro'yxatdan o'tishingiz kerak. \n\nIltimos telefon raqamingizni \"Raqamni yuborish\" tugmasi orqali yuboring.!</b>"
         user_info = await db.select_user(user_id=int(user_id))
@@ -107,13 +112,13 @@ class CheckPhoneNumber(BaseMiddleware):
             register = user['register']
             number = user['number']
             
-            if number is None and content_type != 'contact':
+            if number is None and content_type != 'contact' and bot_username!=username:
                 await bot.send_message(chat_id=user_id, text=matn, reply_markup=kb.contact())
                 await dp.current_state(user=user_id).set_state(RegisterState.PhoneNumber)
             else:
                 return
         else:
-            if xabar.message:
+            if xabar.message and bot_username!=username:
                 argument = xabar.message.get_args()
                 if argument:
                     if argument.isdigit() and int(argument) > 10 and await db.is_user(user_id=int(argument)):
@@ -130,6 +135,7 @@ class CheckPhoneNumber(BaseMiddleware):
                         except Exception as e:
                             await bot.send_message(chat_id=ADMINS[0], text=f'Botda xatolik yuz berdi: {e}')
                 else:
+                    
                     try:
                         await db.add_user(user_id=int(user_id), username=username, name=first_name)
                     except asyncpg.exceptions.UniqueViolationError:

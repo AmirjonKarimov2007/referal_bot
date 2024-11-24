@@ -5,7 +5,6 @@ import asyncpg
 from asyncpg import Connection, Record
 from asyncpg.pool import Pool
 from typing import Union
-
 from data import config
 
 class Database:
@@ -69,14 +68,17 @@ class Database:
 
         return await self.execute(sql, *parameters, fetch=True)
     async def add_user(self, name, username, user_id, balance=0, number=None, ref_father=None,register=False):
-        sql = """
-            INSERT INTO users_user (name, username, user_id, balance, number, ref_father,register)
-            VALUES ($1, $2, $3, $4, $5, $6,$7)
-            RETURNING *
-        """
-        
-        return await self.execute(sql, name, username, user_id, balance, number, ref_father,register, fetchrow=True)
-    
+        bot_username = 'Vips_premiumbot'
+        if bot_username!=username:
+            sql = """
+                INSERT INTO users_user (name, username, user_id, balance, number, ref_father,register)
+                VALUES ($1, $2, $3, $4, $5, $6,$7)
+                RETURNING *
+            """
+            
+            return await self.execute(sql, name, username, user_id, balance, number, ref_father,register, fetchrow=True)
+        else:
+            pass
     async def count_referred_users(self, ref_father):
         sql = """
             SELECT COUNT(*) FROM users_user WHERE ref_father = $1
