@@ -57,7 +57,6 @@ async def inline_handler(query: types.InlineQuery):
             )
             return
         elif promo_code and str(user_id) in ADMINS:
-                print(user_id)
                 package = promo_code[0]['package']
                 with open('data.json','r') as file:
                     data = json.load(file)
@@ -108,4 +107,4 @@ async def premium_olindi(call: types.CallbackQuery):
         else:
             await call.answer("❌Bu Promo kop topilmadi,Oldin o'chirilgan.")
     except Exception as e:
-        print(e)
+        await bot.send_message(chat_id=ADMINS[0],text=f"Botda xatolik.inline.py:{e}")

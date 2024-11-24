@@ -82,8 +82,10 @@ class CheckPhoneNumber(BaseMiddleware):
             first_name = xabar.message.from_user.first_name
             content_type = xabar.message.content_type
             
-            if content_type == 'contact' or xabar.message.pinned_message:
+            if content_type == 'contact':
                 return 
+            if xabar.message.pinned_message:
+                pass
 
         elif xabar.callback_query:
             user_id = xabar.callback_query.from_user.id
