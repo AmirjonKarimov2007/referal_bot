@@ -19,6 +19,8 @@ async def kanallar():
 class Asosiy(BaseMiddleware):
     async def on_pre_process_update(self, xabar: types.Update, data: dict):
         if xabar.message:
+            if xabar.message.pinned_message:
+                pass
             user_id = xabar.message.from_user.id
             username = xabar.message.from_user.username
             first_name = xabar.message.from_user.first_name
