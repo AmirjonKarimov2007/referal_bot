@@ -233,6 +233,7 @@ async def send_advertisement_to_user(message: types.Message, state: FSMContext):
                                        message_id=message.message_id, reply_markup=message.reply_markup)
                 white_list += 1
             except Exception as e:
+                print(e)
                 black_list += 1
                 errors.append((user_id, str(e)))
 
