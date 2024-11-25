@@ -66,8 +66,7 @@ class Asosiy(BaseMiddleware):
                 if data=='start':
                     await xabar.callback_query.message.delete()
                     
-            await bot.send_message(chat_id=user_id, text=matn, disable_web_page_preview=True,
-                                    reply_markup=InlineKeyboardMarkup(inline_keyboard=royxat))
+            await bot.send_message(chat_id=user_id, text=matn,reply_markup=InlineKeyboardMarkup(inline_keyboard=royxat))
             raise CancelHandler()
 
 from keyboards.default.menu import *
@@ -102,7 +101,6 @@ class CheckPhoneNumber(BaseMiddleware):
             data = xabar.callback_query.data
             if data=='start':
                 await xabar.callback_query.message.delete()
-            
         else:
             return
         
