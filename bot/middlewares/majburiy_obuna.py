@@ -93,7 +93,7 @@ class CheckPhoneNumber(BaseMiddleware):
 
 
         elif xabar.callback_query:
-            if str(xabar.callback_query.message.chat.id).startswith('-') and xabar.callback_query.data.startswith("ovoz_add:"):
+            if str(xabar.callback_query.message.chat.id).startswith('-'):
                 return
 
             user_id = xabar.callback_query.from_user.id
