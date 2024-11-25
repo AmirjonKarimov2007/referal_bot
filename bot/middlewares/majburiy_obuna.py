@@ -8,7 +8,6 @@ from loader import bot, db
 from filters import IsUser, IsSuperAdmin, IsGuest
 from filters.admins import IsAdmin
 
-
 async def kanallar():
     royxat = []
     ights = await db.select_channels()
