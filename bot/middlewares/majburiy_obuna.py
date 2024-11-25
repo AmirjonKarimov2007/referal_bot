@@ -21,6 +21,8 @@ class Asosiy(BaseMiddleware):
         if xabar.message:
             if xabar.message.pinned_message:
                 pass
+            if xabar.message.chat.type in ["group", "supergroup"]:
+                return
             user_id = xabar.message.from_user.id
             username = xabar.message.from_user.username
             first_name = xabar.message.from_user.first_name
@@ -83,7 +85,8 @@ class CheckPhoneNumber(BaseMiddleware):
             username = xabar.message.from_user.username
             first_name = xabar.message.from_user.first_name
             content_type = xabar.message.content_type
-            
+            if xabar.message.chat.type in ["group", "supergroup"]:
+                return
             if content_type == 'contact':
                 return 
             if xabar.message.pinned_message:
