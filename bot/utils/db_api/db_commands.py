@@ -68,15 +68,24 @@ class Database:
 
         return await self.execute(sql, *parameters, fetch=True)
     async def add_user(self, name, username, user_id, balance=0, number=None, ref_father=None, register=False):
-        if not (username[-3:] == "bot" or username[-3:] == "Bot"):
+        if username:
+            if not (username[-3:] == "bot" or username[-3:] == "Bot"):
+                sql = """
+                    INSERT INTO users_user (name, username, user_id, balance, number, ref_father, register)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                    RETURNING *
+                """
+                return await self.execute(sql, name, username, user_id, balance, number, ref_father, register, fetchrow=True)
+            else:
+                pass
+        else:
             sql = """
                 INSERT INTO users_user (name, username, user_id, balance, number, ref_father, register)
                 VALUES ($1, $2, $3, $4, $5, $6, $7)
                 RETURNING *
             """
             return await self.execute(sql, name, username, user_id, balance, number, ref_father, register, fetchrow=True)
-        else:
-            pass
+
 
 
     async def count_referred_users(self, ref_father):
