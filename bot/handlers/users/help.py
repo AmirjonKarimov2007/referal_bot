@@ -1,5 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandHelp
+from filters.users import IsGroup
 
 from loader import dp,bot
 
@@ -11,5 +12,10 @@ async def bot_help(message: types.Message):
             "/help - Yordam")
     
     await message.answer("\n".join(text))
-
+@dp.callback_query_handler(IsGroup)
+async def falsereturn(message: types.Message):
+    pass
+@dp.message_handler(IsGroup)
+async def falsereturn(message: types.Message):
+    pass
 

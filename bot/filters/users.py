@@ -22,3 +22,9 @@ class IsGuest(BoundFilter):
             return False
         else:
             return True
+class IsGroup(BoundFilter):
+    async def check(self, message: types.Message) -> bool:
+        return message.chat.type in (
+            types.ChatType.GROUP,
+            types.ChatType.SUPERGROUP,
+        )
