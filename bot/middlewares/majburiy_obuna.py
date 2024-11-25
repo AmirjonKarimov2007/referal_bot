@@ -69,7 +69,7 @@ class Asosiy(BaseMiddleware):
             try:
                 await bot.send_message(chat_id=user_id, text=matn, reply_markup=InlineKeyboardMarkup(inline_keyboard=royxat))
             except BotBlocked:
-                print(f"Foydalanuvchi {user_id} botni bloklagan.")
+                print(f"Foydalanuvchi {user_id} botni bloklagan:line-72")
             except Exception as e:
                 await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:{e}")
             raise CancelHandler()
@@ -124,8 +124,13 @@ class CheckPhoneNumber(BaseMiddleware):
             number = user['number']
             
             if number is None and bot_username!=username:
-                await bot.send_message(chat_id=user_id, text=matn, reply_markup=kb.contact())
-                await dp.current_state(user=user_id).set_state(RegisterState.PhoneNumber)
+                try:
+                    await bot.send_message(chat_id=user_id, text=matn, reply_markup=kb.contact())
+                    await dp.current_state(user=user_id).set_state(RegisterState.PhoneNumber)
+                except BotBlocked:
+                    print(f"Foydalanuvchi {user_id} botni bloklagan:line-131")
+                except Exception as e:
+                    await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:{e}")
             else:
                 return
         else:
@@ -138,11 +143,16 @@ class CheckPhoneNumber(BaseMiddleware):
                             ffather_name = rfather[0]['name']
                             ffather_username = rfather[0]['username']
                             await db.add_user(user_id=user_id, username=username, name=first_name, ref_father=int(argument))
-                            await bot.send_message(
-                                chat_id=user_id, 
-                                text=f"<b>👋🏻 Assalomu Aleykum {first_name}, botimizga Tashrif buyurganingizdan xursandmiz kelipsiz!\n\nSizni <a href='t.me/{ffather_username}'>{xabar.message.from_user.full_name}</a> taklif qildi.</b>", 
-                                reply_markup=kb.contact()
-                            )
+                            try:
+                                await bot.send_message(
+                                    chat_id=user_id, 
+                                    text=f"<b>👋🏻 Assalomu Aleykum {first_name}, botimizga Tashrif buyurganingizdan xursandmiz kelipsiz!\n\nSizni <a href='t.me/{ffather_username}'>{xabar.message.from_user.full_name}</a> taklif qildi.</b>", 
+                                    reply_markup=kb.contact()
+                                )
+                            except BotBlocked:
+                                print(f"Foydalanuvchi {user_id} botni bloklagan:153-line")
+                            except Exception as e:
+                                await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:{e}")
                         except Exception as e:
                             await bot.send_message(chat_id=ADMINS[0], text=f'Botda xatolik yuz berdi: {e}')
                 else:
