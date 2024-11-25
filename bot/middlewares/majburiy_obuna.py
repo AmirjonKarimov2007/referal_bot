@@ -1,3 +1,4 @@
+from aiogram.utils.exceptions import BotBlocked
 from aiogram import types
 from aiogram.dispatcher.handler import CancelHandler
 from aiogram.dispatcher.middlewares import BaseMiddleware
@@ -65,8 +66,12 @@ class Asosiy(BaseMiddleware):
                 data = xabar.callback_query.data
                 if data=='start':
                     await xabar.callback_query.message.delete()
-                    
-            await bot.send_message(chat_id=user_id, text=matn,reply_markup=InlineKeyboardMarkup(inline_keyboard=royxat))
+            try:
+                await bot.send_message(chat_id=user_id, text=matn, reply_markup=InlineKeyboardMarkup(inline_keyboard=royxat))
+            except BotBlocked:
+                print(f"Foydalanuvchi {user_id} botni bloklagan.")
+            except Exception as e:
+                await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:{e}")
             raise CancelHandler()
 
 from keyboards.default.menu import *
