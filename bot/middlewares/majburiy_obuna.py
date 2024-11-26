@@ -35,7 +35,7 @@ class Asosiy(BaseMiddleware):
                         try:
                             await db.add_user(user_id=user_id, username=username, name=first_name, ref_father=int(argument))
                         except asyncpg.exceptions.UniqueViolationError:
-                            await db.select_user(user_id=call.from_user.id)
+                            await db.select_user(user_id=user_id)
                         except Exception as e:
                             await bot.send_message(chat_id=ADMINS[0], text=f'Botda xatolik yuz berdi: majburiy_obuna:{e}')
                 else:
@@ -161,7 +161,7 @@ class CheckPhoneNumber(BaseMiddleware):
                             except BotBlocked:
                                 print(f"Foydalanuvchi {user_id} botni bloklagan:153-line")
                             except asyncpg.exceptions.UniqueViolationError:
-                                await db.select_user(user_id=call.from_user.id)
+                                await db.select_user(user_id=user_id)
                             except Exception as e:
                                 await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi::Check_Phone_Number:158{e}")
                         except Exception as e:
