@@ -145,8 +145,8 @@ class CheckPhoneNumber(BaseMiddleware):
                             rfather = await db.is_user(user_id=int(argument))
                             ffather_name = rfather[0]['name']
                             ffather_username = rfather[0]['username']
-                            await db.add_user(user_id=user_id, username=username, name=first_name, ref_father=int(argument))
                             try:
+                                await db.add_user(user_id=user_id, username=username, name=first_name, ref_father=int(argument))
                                 await bot.send_message(
                                     chat_id=user_id, 
                                     text=f"<b>👋🏻 Assalomu Aleykum {first_name}, botimizga Tashrif buyurganingizdan xursandmiz kelipsiz!\n\nSizni <a href='t.me/{ffather_username}'>{xabar.message.from_user.full_name}</a> taklif qildi.</b>", 
@@ -154,6 +154,8 @@ class CheckPhoneNumber(BaseMiddleware):
                                 )
                             except BotBlocked:
                                 print(f"Foydalanuvchi {user_id} botni bloklagan:153-line")
+                            except asyncpg.exceptions.UniqueViolationError:
+                                await db.select_user(user_id=call.from_user.id)
                             except Exception as e:
                                 await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi::Check_Phone_Number:158{e}")
                         except Exception as e:
@@ -164,6 +166,9 @@ class CheckPhoneNumber(BaseMiddleware):
                         await db.add_user(user_id=int(user_id), username=username, name=first_name)
                     except asyncpg.exceptions.UniqueViolationError:
                         await db.select_user(user_id=int(user_id))
+                    except Exception as e:
+                                await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi::Check_Phone_Number:170{e}")
+
             await dp.current_state(user=user_id).set_state(RegisterState.PhoneNumber)
             
         raise CancelHandler()
