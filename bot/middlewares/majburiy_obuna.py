@@ -1,4 +1,4 @@
-from aiogram.utils.exceptions import BotBlocked
+from aiogram.utils.exceptions import BotBlocked,TelegramAPIError
 from aiogram import types
 from aiogram.dispatcher.handler import CancelHandler
 from aiogram.dispatcher.middlewares import BaseMiddleware
@@ -73,8 +73,14 @@ class Asosiy(BaseMiddleware):
                 await bot.send_message(chat_id=user_id, text=matn, reply_markup=InlineKeyboardMarkup(inline_keyboard=royxat))
             except BotBlocked:
                 print(f"Foydalanuvchi {user_id} botni bloklagan:line-72")
+            except TelegramAPIError as e:
+                if "bots can't send messages to bots" in str(e):
+                    return
+                else:
+                    await bot.send_message(ADMINS[0], text=f"Xatolik yuz berdi: Majburiy Obuna:80 {e}")
             except Exception as e:
-                await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:Majburiy Obuna:77{e}")
+                await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:Majburiy Obuna:82{e}")
+
             raise CancelHandler()
 
 from keyboards.default.menu import *
