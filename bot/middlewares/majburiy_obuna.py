@@ -34,13 +34,17 @@ class Asosiy(BaseMiddleware):
                     if await db.is_user(user_id=int(argument)) and argument.isdigit() and int(argument) > 10:
                         try:
                             await db.add_user(user_id=user_id, username=username, name=first_name, ref_father=int(argument))
+                        except asyncpg.exceptions.UniqueViolationError:
+                            await db.select_user(user_id=call.from_user.id)
                         except Exception as e:
                             await bot.send_message(chat_id=ADMINS[0], text=f'Botda xatolik yuz berdi: majburiy_obuna:{e}')
                 else:
                     try:
                         await db.add_user(user_id=int(user_id), username=username, name=first_name)
                     except asyncpg.exceptions.UniqueViolationError:
-                        await db.select_user(user_id=int(user_id))   
+                        await db.select_user(user_id=int(user_id))
+                    except Exception as e:
+                            await bot.send_message(chat_id=ADMINS[0], text=f'Botda xatolik yuz berdi: majburiy_obuna:{e}')
                
         elif xabar.callback_query:
             user_id = xabar.callback_query.from_user.id
@@ -90,7 +94,7 @@ class CheckPhoneNumber(BaseMiddleware):
             if content_type == 'contact':
                 return 
             if xabar.message.pinned_message:
-                pass
+                return
             if str(xabar.message.chat.id).startswith('-'):
                 return
 
@@ -129,7 +133,7 @@ class CheckPhoneNumber(BaseMiddleware):
                 except BotBlocked:
                     print(f"Foydalanuvchi {user_id} botni bloklagan:line-131")
                 except Exception as e:
-                    await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:{e}")
+                    await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:Check_Phone_Number:136:{e}")
             else:
                 return
         else:
@@ -151,9 +155,9 @@ class CheckPhoneNumber(BaseMiddleware):
                             except BotBlocked:
                                 print(f"Foydalanuvchi {user_id} botni bloklagan:153-line")
                             except Exception as e:
-                                await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:{e}")
+                                await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi::Check_Phone_Number:158{e}")
                         except Exception as e:
-                            await bot.send_message(chat_id=ADMINS[0], text=f'Botda xatolik yuz berdi: {e}')
+                            await bot.send_message(chat_id=ADMINS[0], text=f'Botda xatolik yuz berdi::Check_Phone_Number:160 {e}')
                 else:
                     
                     try:
