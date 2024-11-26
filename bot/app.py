@@ -17,9 +17,8 @@ async def on_startup(dispatcher):
           print(err)
     await set_default_commands(dispatcher)
     await on_startup_notify(dispatcher)
-async def send_message(e):
-    await bot.send_message(chat_id=ADMINS[0],text=f'<b>Xatolik yuz berdi:{e}</b>')
-from data.config import ADMINS
+
+
 if __name__ == '__main__':
     try:
         executor.start_polling(dp, on_startup=on_startup)

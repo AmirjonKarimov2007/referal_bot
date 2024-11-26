@@ -74,7 +74,7 @@ class Asosiy(BaseMiddleware):
             except BotBlocked:
                 print(f"Foydalanuvchi {user_id} botni bloklagan:line-72")
             except Exception as e:
-                await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:{e}")
+                await bot.send_message(ADMINS[0],text=f"Xatolik yuz berdi:Majburiy Obuna:77{e}")
             raise CancelHandler()
 
 from keyboards.default.menu import *
